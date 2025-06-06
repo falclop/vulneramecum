@@ -1,0 +1,133 @@
+﻿@page "/vulnerabilities"
+@using vulneramecum.Service
+@using vulneramecum.Data
+@inject VulnerabilityService VulnService
+
+<h3 class="mb-4">Guía de Vulnerabilidades</h3>
+
+<div class="row mb-3">
+    <div class="col-md-4">
+        <input class="form-control" placeholder="Buscar por título o descripción..."
+               @bind="SearchText" />
+    </div>
+    <div class="col-md-3">
+        <select class="form-select" @bind="SelectedLanguage">
+            <option value="">Todos los lenguajes</option>
+            <option value="C#">C#</option>
+            <option value="JavaScript">JavaScript</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <select class="form-select" @bind="SelectedSeverity">
+            <option value="">Todas las criticidades</option>
+            <option value="Alta">Alta</option>
+            <option value="Media">Media</option>
+            <option value="Baja">Baja</option>
+        </select>
+    </div>
+</div>
+
+@if (filteredVulnerabilities is null)
+{
+    <p>Cargando vulnerabilidades...</p>
+}
+else if (!filteredVulnerabilities.Any())
+{
+    <p>No se encontraron resultados.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var vuln in filteredVulnerabilities)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border border-2 @GetSeverityColor(vuln.Severity)">
+                    <img src="@vuln.Images.FirstOrDefault()?.ImagePath" class="card-img-top" alt="Imagen de vulnerabilidad">
+                    <div class="card-body">
+                        <h5 class="card-title">@vuln.Title</h5>
+                        <p class="card-text text-muted">@vuln.Language | @vuln.Severity</p>
+                        <p class="card-text">@vuln.Description.Substring(0, Math.Min(150, vuln.Description.Length))...</p>
+                        <a class="btn btn-sm btn-primary" href="/vulnerabilities/@vuln.Id">Ver detalles</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<Vulnerability>? vulnerabilities;
+    private List<Vulnerability> filteredVulnerabilities = new();
+    private string searchText = string.Empty;
+    private string selectedLanguage = string.Empty;
+    private string selectedSeverity = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        vulnerabilities = await VulnService.GetAllVulnerabilitiesAsync();
+        ApplyFilters();
+    }
+
+    private void ApplyFilters()
+    {
+        filteredVulnerabilities = vulnerabilities!
+            .Where(v =>
+                (string.IsNullOrWhiteSpace(searchText) ||
+                 v.Title.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                 v.Description.Contains(searchText, StringComparison.OrdinalIgnoreCase)) &&
+                (string.IsNullOrWhiteSpace(selectedLanguage) || v.Language == selectedLanguage) &&
+                (string.IsNullOrWhiteSpace(selectedSeverity) || v.Severity == selectedSeverity)
+            )
+            .ToList();
+    }
+
+    private string SearchText
+    {
+        get => searchText;
+        set
+        {
+            if (searchText != value)
+            {
+                searchText = value;
+                ApplyFilters();
+            }
+        }
+    }
+    
+    private string SelectedLanguage
+    {
+        get => selectedLanguage;
+        set
+        {
+            if (selectedLanguage != value)
+            {
+                selectedLanguage = value;
+                ApplyFilters();
+            }
+        }
+    }
+
+    private string SelectedSeverity
+    {
+        get => selectedSeverity;
+        set
+        {
+            if (selectedSeverity != value)
+            {
+                selectedSeverity = value;
+                ApplyFilters();
+            }
+        }
+    }
+
+    private string GetSeverityColor(string severity)
+    {
+        return severity switch
+        {
+            "Alta" => "border-danger",
+            "Media" => "border-warning",
+            "Baja" => "border-success",
+            _ => "border-secondary"
+        };
+    }
+}

@@ -35,7 +35,7 @@ GO
 CREATE TABLE Examples (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     VulnerabilityId INT NOT NULL,
-    ProjectName NVARCHAR(100) NOT NULL,
+    PropertyName NVARCHAR(100) NOT NULL,
     ClassName NVARCHAR(100) NOT NULL,
     CommitHash NVARCHAR(100) NOT NULL,
     CommitDate DATE NOT NULL,  -- Solo fecha
