@@ -1,8 +1,16 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.EntityFrameworkCore;
 using vulneramecum.Data;
+using vulneramecum.Service;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Agregar AppDbContext con SQL Server
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<VulnerabilityService>();
+
 
 // Add services to the container.
 builder.Services.AddRazorPages();
