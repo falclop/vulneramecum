@@ -466,3 +466,43 @@ wwwroot/uploads
 
 #Clave
 Config
+
+# =============================
+# .NET / Visual Studio
+# =============================
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Archivos de publicación
+*.Publish.xml
+*.pubxml
+*.pfx
+*.snk
+
+# Archivos generados por el IDE
+.vs/
+.vscode/
+*.dbmdl
+
+# Archivos de configuración locales
+appsettings.Development.json
+appsettings.Local.json
+
+# Archivos de seguridad o claves
+Config/secreto.txt
+
+# Archivos de log temporales
+*.log
+
+# Datos personales
+*.env
+.env.*
+
+# Archivos de sistema (Windows / macOS / Linux)
+Thumbs.db
+.DS_Store
+.idea/
