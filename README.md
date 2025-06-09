@@ -22,23 +22,22 @@ La aplicación nace de la necesidad de contar con una **guía ágil, visual y pe
 ---
 
 ## 🧱 Estructura del proyecto
-
+```
 vulneramecum/
-├── Data/ # Modelos de entidad y AppDbContext
-├── Pages/ # Componentes Blazor (.razor)
-├── Service/ # Lógica de negocio y acceso a datos
-├── wwwroot/ # Estáticos (CSS, imágenes, etc.)
-├── appsettings.json # Configuración de cadena de conexión
-├── Program.cs # Bootstrap del servidor ASP.NET Core
-└── README.md # Este archivo
-
+    ├─ Data/ # Modelos de entidad y AppDbContext
+    ├─ Pages/ # Componentes Blazor (.razor)
+    ├─ Service/ # Lógica de negocio y acceso a datos
+    ├─ wwwroot/ # Estáticos (CSS, imágenes, etc.)
+    ├─ appsettings.json # Configuración de cadena de conexión
+    ├─ Program.cs # Bootstrap del servidor ASP.NET Core
+    └─ README.md # Este archivo
+```
 ---
 
 ## 🔁 Flujo de usuario
-
 ```mermaid
     flowchart TD
-    A[Inicio ("/")] --> B[Lista de vulnerabilidades]
+    A[Inicio] --> B[Lista de vulnerabilidades]
     B --> C[Buscar / Filtrar por texto, lenguaje, severidad]
     B --> D[Ver detalles de una vulnerabilidad]
     D --> E[Ejemplos visuales y casos reales]
