@@ -463,3 +463,6 @@ dkms.conf
 
 # Imágenes
 wwwroot/uploads
+
+#Clave
+Config

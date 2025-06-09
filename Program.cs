@@ -6,31 +6,41 @@ using vulneramecum.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Agregar AppDbContext con SQL Server
+// Configurar AppDbContext con SQL Server
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Servicios de aplicación
 builder.Services.AddScoped<VulnerabilityService>();
 
+// Registrar servicios de sesión (si decides mantener sesión)
+builder.Services.AddDistributedMemoryCache(); // <- Necesario
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(60);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
-// Add services to the container.
+builder.Services.AddHttpContextAccessor();
+
+// Servicios Blazor
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configuración del pipeline HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
-
 app.UseRouting();
+app.UseSession(); // <- Solo si AddSession y AddDistributedMemoryCache están activos
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
