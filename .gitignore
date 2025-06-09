@@ -460,3 +460,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Imágenes
+wwwroot/uploads
