@@ -42,7 +42,7 @@ else
         {
             <div class="col-md-4 mb-4">
                 <div class="card h-100 border border-2 @GetSeverityColor(vuln.Severity)">
-                    <img src="@vuln.Images.FirstOrDefault()?.ImagePath" class="card-img-top" alt="Imagen de vulnerabilidad">
+                    <img src="@vuln.Images.FirstOrDefault()?.ImagePath" class="card-img-top" style="padding: 0.25rem" alt="Imagen de vulnerabilidad">
                     <div class="card-body">
                         <h5 class="card-title">@vuln.Title</h5>
                         <p class="card-text text-muted">@vuln.Language | @vuln.Severity</p>
