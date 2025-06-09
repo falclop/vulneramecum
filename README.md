@@ -37,8 +37,8 @@ vulneramecum/
 ## 🔁 Flujo de usuario
 
 ```mermaid
-flowchart TD
-    A[Inicio (/)] --> B[Lista de vulnerabilidades]
+    flowchart TD
+    A[Inicio ("/")] --> B[Lista de vulnerabilidades]
     B --> C[Buscar / Filtrar por texto, lenguaje, severidad]
     B --> D[Ver detalles de una vulnerabilidad]
     D --> E[Ejemplos visuales y casos reales]
