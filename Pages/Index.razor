@@ -3,24 +3,10 @@
 
 <div class="d-flex justify-content-center align-items-center vh-100 flex-column">
     <div class="text-center">
+        <img src="images/logo.png" alt="Vulneramecum Logo" class="mb-4" style="width: 250px; height: auto;" />
         <h1 class="display-4 mb-3">Vulneramecum</h1>
-        <p class="lead text-muted">Cargando guía de vulnerabilidades...</p>
-        <div class="spinner-border text-primary mt-3" role="status">
-            <span class="visually-hidden">Cargando...</span>
-        </div>
+        <p class="lead text-muted">Compendio de vulnerabilidades</p>
+        <NavLink href="vulnerabilities" type="button" class="btn btn-outline-secondary btn-sm mb-3">Vulnerabilidades</NavLink>
+        <NavLink href="vulnform" type="button" class="btn btn-outline-secondary btn-sm mb-3">Nueva Vulnerabilidad</NavLink>
     </div>
 </div>
-
-@code {
-    protected override void OnAfterRender(bool firstRender)
-    {
-        if (firstRender)
-        {
-            // Espera breve para mostrar el splash antes de redirigir
-            Task.Delay(1000).ContinueWith(_ =>
-            {
-                InvokeAsync(() => Navigation.NavigateTo("/vulnerabilities"));
-            });
-        }
-    }
-}

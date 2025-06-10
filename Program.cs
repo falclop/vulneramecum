@@ -45,4 +45,23 @@ app.UseSession(); // <- Solo si AddSession y AddDistributedMemoryCache están act
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
+try
+{
+    var url = "http://127.0.0.1:5000";
+    _ = Task.Run(() =>
+    {
+        Thread.Sleep(1000); // Espera un poco a que arranque el servidor
+        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+        {
+            FileName = url,
+            UseShellExecute = true
+        });
+    });
+}
+catch
+{
+    Console.WriteLine("No se pudo abrir el navegador automáticamente. Asegúrate de abrir la URL manualmente: http://localhost:5000");
+}
+
+
 app.Run();
