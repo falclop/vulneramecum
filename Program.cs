@@ -1,20 +1,21 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
+using Penman.Blazor.Quill;
 using vulneramecum.Data;
 using vulneramecum.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurar AppDbContext con SQL Server
-builder.Services.AddDbContext<AppDbContext>(options =>
+// Configuración del contexto de base de datos SQL Server
+builder.Services.AddDbContextFactory<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Servicios de aplicación
 builder.Services.AddScoped<VulnerabilityService>();
 
-// Registrar servicios de sesión (si decides mantener sesión)
-builder.Services.AddDistributedMemoryCache(); // <- Necesario
+// Soporte para sesión (por si se habilita autenticación u otras funcionalidades)
+builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(60);
@@ -22,15 +23,20 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+// Otros servicios
 builder.Services.AddHttpContextAccessor();
 
 // Servicios Blazor
 builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
+builder.Services.AddServerSideBlazor()
+    .AddCircuitOptions(options => options.DetailedErrors = true);
+
+// Soporte para editor Quill
+builder.Services.AddPenmanQuill();
 
 var app = builder.Build();
 
-// Configuración del pipeline HTTP
+// Pipeline HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -40,17 +46,18 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseSession(); // <- Solo si AddSession y AddDistributedMemoryCache están activos
+app.UseSession();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
+// Autoabrir navegador al iniciar
 try
 {
     var url = "http://127.0.0.1:5000";
     _ = Task.Run(() =>
     {
-        Thread.Sleep(1000); // Espera un poco a que arranque el servidor
+        Thread.Sleep(1000); // Esperar a que arranque el servidor
         System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
         {
             FileName = url,
@@ -60,8 +67,8 @@ try
 }
 catch
 {
-    Console.WriteLine("No se pudo abrir el navegador automáticamente. Asegúrate de abrir la URL manualmente: http://localhost:5000");
+    Console.WriteLine("No se pudo abrir el navegador automáticamente. Abre manualmente: http://127.0.0.1:5000");
 }
 
-
+// Lanzar la app
 app.Run();

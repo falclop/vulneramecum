@@ -1,12 +1,47 @@
 ﻿@page "/"
+@using vulneramecum.Service
 @inject NavigationManager Navigation
+@inject VulnerabilityService VulnService
 
-<div class="d-flex justify-content-center align-items-center vh-100 flex-column">
-    <div class="text-center">
-        <img src="images/logo.png" alt="Vulneramecum Logo" class="mb-4" style="width: 250px; height: auto;" />
-        <h1 class="display-4 mb-3">Vulneramecum</h1>
-        <p class="lead text-muted">Compendio de vulnerabilidades</p>
-        <NavLink href="vulnerabilities" type="button" class="btn btn-outline-secondary btn-sm mb-3">Vulnerabilidades</NavLink>
-        <NavLink href="vulnform" type="button" class="btn btn-outline-secondary btn-sm mb-3">Nueva Vulnerabilidad</NavLink>
+@if (loading)
+{
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <div class="text-center">
+            <div class="spinner-border text-primary mb-3" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="text-muted">Inicializando aplicación...</p>
+        </div>
     </div>
-</div>
+}
+else
+{
+    <div class="d-flex justify-content-center align-items-center vh-100 flex-column">
+        <div class="text-center">
+            <img src="images/logo.png" alt="Vulneramecum Logo" class="mb-4" style="width: 250px; height: auto;" />
+            <h1 class="display-4 mb-3">Vulneramecum</h1>
+            <p class="lead text-muted">Compendio de vulnerabilidades</p>
+            <NavLink href="vulnerabilities" class="btn btn-outline-secondary btn-sm mb-2 me-2">Vulnerabilidades</NavLink>
+            <NavLink href="vulnform" class="btn btn-outline-success btn-sm mb-2">Nueva Vulnerabilidad</NavLink>
+        </div>
+    </div>
+}
+
+@code {
+    private bool loading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Simulamos una llamada real para asegurar que la DB responde
+            var test = await VulnService.GetAllVulnerabilitiesAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[ERROR] No se pudo conectar a la base de datos: {ex.Message}");
+        }
+
+        loading = false;
+    }
+}
