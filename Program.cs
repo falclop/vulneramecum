@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Penman.Blazor.Quill;
 using vulneramecum.Data;
 using vulneramecum.Service;
+using static System.Net.WebRequestMethods;
 
 var builder = WebApplication.CreateBuilder(args);
 
