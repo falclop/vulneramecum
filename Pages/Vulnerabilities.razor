@@ -46,7 +46,7 @@ else
                     <div class="card-body">
                         <h5 class="card-title">@vuln.Title</h5>
                         <p class="card-text text-muted">@vuln.Language | @vuln.Severity</p>
-                        <p class="card-text">@vuln.Description.Substring(0, Math.Min(150, vuln.Description.Length))...</p>
+                        <p class="card-text">@((MarkupString)(vuln.Description.Substring(0, Math.Min(150, vuln.Description.Length)) + "..."))</p>
                         <a class="btn btn-sm btn-primary" href="/vulnerabilities/@vuln.Id">Ver detalles</a>
                     </div>
                 </div>
